@@ -101,8 +101,10 @@ Card::Card(Rank rank_in, Suit suit_in)
 : rank(rank_in), suit(suit_in){}
 
 // Returns the rank
-Card::Card
-
+Rank Card::get_rank() const
+{
+    return rank;
+}
 
 // Returns the suit. Does not consider trump.
 
