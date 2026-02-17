@@ -213,13 +213,159 @@ std::ostream & operator<<(std::ostream &os, const Card &card)
 // which means it is allowed to access card.rank and card.suit.
 std::istream & operator>>(std::istream &is, Card &card)
 {
+    string s {" of "};
+    
+    is >> card.rank >> s >> card.suit;
+    
+    return is;
+}
+
+// Returns true if lhs is lower value than rhs
+// Does not consider trump
+bool operator<(const Card &lhs, const Card &rhs)
+{
+    if (lhs.get_rank() < rhs.get_rank())
+    {
+        return true;
+    }
+    
+    return false;
+    
+}
+
+// Returns true if lhs is lower value than rhs or the same card as rhs
+// Does not consider trump
+bool operator<=(const Card &lhs, const Card &rhs)
+{
+    if (lhs.get_rank() <= rhs.get_rank())
+    {
+        return true;
+    }
+    
+    return false;
+    
+}
+
+// Returns true if if lhs is higher value than rhs
+bool operator>(const Card &lhs, const Card &rhs)
+{
+    if (lhs.get_rank() > rhs.get_rank())
+    {
+        return true;
+    }
+    
+    return false;
+    
+}
+
+// Returns true if lhs is higher value than rhs or the same card
+// as rhs
+
+bool operator>=(const Card &lhs, const Card &rhs)
+{
+    if (lhs.get_rank() >= rhs.get_rank())
+    {
+        return true;
+    }
+    
+    return false;
     
 }
 
 
 
+// Returns true if lhs is same card as rhs
+// Does not consider trump
+bool operator==(const Card &lhs, const Card &rhs)
+{
+    if (lhs.get_rank() == rhs.get_rank()
+        && lhs.get_suit() == rhs.get_suit())
+    {
+        return true;
+    }
+    
+    return false;
+    
+}
 
+// Returns true if lhs is not the same card as rhs.
+// Does not consider trump
+bool operator!=(const Card &lhs, const Card &rhs)
+{
+    if (lhs.get_rank() != rhs.get_rank()
+        || lhs.get_suit() != rhs.get_suit())
+    {
+        return true;
+    }
+    
+    return false;
 
+}
+
+// Returns true if a is lower value than b. Uses trump to determine
+// order, as described in the spec.
+bool Card_less(const Card &a, const Card &b, Suit trump)
+{
+    if (a.is_trump(trump) && !(b.is_trump(trump)))
+    {
+        return false;
+    }
+    
+    if (!(a.is_trump(trump)) && b.is_trump(trump))
+    {
+        return true;
+    }
+    
+    else
+    {
+        if (a.get_rank() < b.get_rank())
+        {
+            return true;
+        }
+        
+        return false;
+        
+    }
+}
+
+// Returns true if a is lower value than b. Uses both the trump suit
+// and the suit led to determine order, as described in the spec
+bool Card_less(const Card &a, const Card &b, const Card &led_card, Suit
+    trump)
+{
+    if (a.is_trump(trump) && !(b.is_trump(trump)))
+    {
+        return false;
+    }
+    
+    if (!(a.is_trump(trump)) && b.is_trump(trump))
+    {
+        return true;
+    }
+    
+    if (a.get_suit(trump) == led_card.get_suit(trump)
+        && b.get_suit(trump) != led_card.get_suit(trump))
+    {
+        return false;
+    }
+    
+    if (a.get_suit(trump) != led_card.get_suit(trump)
+        && b.get_suit(trump) == led_card.get_suit(trump))
+    {
+        return true;
+    }
+    
+    else
+    {
+        if (a.get_rank() < b.get_rank())
+        {
+            return true;
+        }
+        
+        return false;
+        
+    }
+}
 
 
 
