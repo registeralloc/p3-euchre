@@ -93,6 +93,33 @@ std::istream & operator>>(std::istream &is, Suit &suit) {
 
 /////////////// Write your implementation for Card below ///////////////
 
+// Returns the next suit, which is the suit of the same color
+Suit Suit_next(Suit suit)
+{
+    if (suit == SPADES)
+    {
+        return CLUBS;
+    }
+    
+    if (suit == HEARTS)
+    {
+        return DIAMONDS;
+    }
+    
+    if (suit == CLUBS)
+    {
+        return SPADES;
+    }
+    
+    if (suit == DIAMONDS)
+    {
+        return HEARTS;
+    }
+    
+    assert(false);
+    return SPADES;
+}
+
 // Initializes Card to the Two of Spades
 Card::Card() : rank(TWO), suit(SPADES){}
 
@@ -121,10 +148,81 @@ Suit Card::get_suit(Suit trump) const
     }
     
     return suit;
+
+}
+
+// Returns true if Jack, Queen, King, Ace
+bool Card::is_face_or_ace() const
+{
+    if (rank == JACK || rank == QUEEN || rank == KING || rank == ACE)
+    {
+        return true;
+    }
+    
+    return false;
     
 }
 
-//
+// Returns true if card is the Jack of the trump suit
+bool Card::is_right_bower(Suit trump) const
+{
+    if (rank == JACK && suit == trump)
+    {
+        return true;
+    }
+    
+    return false;
+    
+}
+
+// Returns true if card is the Jack of the next suit
+bool Card::is_left_bower(Suit trump) const
+{
+    if (rank == JACK && suit == Suit_next(trump))
+    {
+        return true;
+    }
+    
+    return false;
+    
+}
+
+// Returns true if the card is a trump card. All cards of the trump suit
+// are trump cards. The left bower is also a trump card.
+bool Card::is_trump(Suit trump) const
+{
+    if (suit == trump || is_left_bower(trump))
+    {
+        return true;
+    }
+    
+    return false;
+    
+}
+
+// Prints Card to stream, for example "Two of Spades"
+std::ostream & operator<<(std::ostream &os, const Card &card)
+{
+    os << card.get_rank() << " of " << card.get_suit();
+    
+    return os;
+}
+
+//EFFECTS Reads a Card from a stream in the format "Two of Spades"
+//NOTE The Card class declares this operator>> "friend" function,
+// which means it is allowed to access card.rank and card.suit.
+std::istream & operator>>(std::istream &is, Card &card)
+{
+    
+}
+
+
+
+
+
+
+
+
 
 // NOTE: We HIGHLY recommend you check out the operator overloading
 // tutorial in the project spec before implementing
