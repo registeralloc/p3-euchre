@@ -107,10 +107,24 @@ Rank Card::get_rank() const
 }
 
 // Returns the suit. Does not consider trump.
+Suit Card::get_suit() const
+{
+    return suit;
+}
 
+// If the card is the left bower return that otherwise return suit
+Suit Card::get_suit(Suit trump) const
+{
+    if (is_left_bower(trump))
+    {
+        return trump;
+    }
+    
+    return suit;
+    
+}
 
 //
-
 
 // NOTE: We HIGHLY recommend you check out the operator overloading
 // tutorial in the project spec before implementing
