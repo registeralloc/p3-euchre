@@ -20,8 +20,22 @@ Pack::Pack() : next(0)
     }
 }
 
+// Initializes Pack by reading from pack_input.
+Pack::Pack(std::istream& pack_input) : next(0)
+{
+    for (int i {0}; i < 24; ++i)
+    {
+        pack_input >> cards[i];
+    }
+};
 
-Pack::Pack(std::istream& pack_input);
+// Returns the next card in the pack and increments the next index
+Card Pack::deal_one()
+{
+    Card i {cards[next]};
+    ++next;
+    return i;
+}
 
 
 
