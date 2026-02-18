@@ -37,5 +37,39 @@ Card Pack::deal_one()
     return i;
 }
 
+// Resets next index to first card in the Pack
+void Pack::reset()
+{
+    next = 0;
+}
 
+// Shuffles the Pack and resets the next index. This performs an in shuffle seven times.
+void Pack::shuffle()
+{
+    for (int i{0}; i < 7; ++i)
+    {
+        std::array<Card, PACK_SIZE> x;
+        
+        for (int j {0}; j < 12; ++j)
+        {
+            x[2 * j] = cards[j + 12];
+            x[2 * j + 1] = cards[j];
+        }
+        // Cards copies x
+        cards = x;
+    }
+    // reset index
+    next = 0;
+    
+}
 
+bool Pack::empty() const
+{
+    if (next >= PACK_SIZE)
+    {
+        return true;
+    }
+    
+    return false;
+    
+}
