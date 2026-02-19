@@ -170,18 +170,64 @@ public:
     //  The card is removed from the player's hand.
     Card play_card(const Card &led_card, Suit trump) override
     {
+        bool canMatch = false;
+        Suit suit {led_card.get_suit(trump)};
+        int x {0};
         
+        for (int i {}; i < hand.size(); ++i)
+        {
+            if (hand[i].get_suit(trump) == suit)
+            {
+                canMatch = true;
+                x = i;
+                break;
+            }
+        }
+        
+        if (canMatch)
+        {
+            for (int i {}; i < hand.size(); ++i)
+            {
+                if (hand[i].get_suit(trump) != suit)
+                {
+                    continue;
+                }
+                
+                if (Card_less(hand[x], hand[i], trump))
+                {
+                    x = i;
+                }
+            }
+            
+            Card saved = hand[x];
+            hand.erase(hand.begin() + x);
+            return saved;
+            
+        }
+        
+        else
+        {
+            x = 0;
+            
+            for (int i {}; i < hand.size(); ++i)
+            {
+                if (Card_less(hand[i], hand[x], trump))
+                {
+                    x = i;
+                }
+            }
+            
+            Card saved = hand[x];
+            hand.erase(hand.begin() + x);
+            return saved;
+            
+        }
     }
-    
     
 private:
    std::string name;
    std::vector<Card> hand;
 };
-
-
-
-
 
 
 class HumanPlayer : public Player
