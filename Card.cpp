@@ -318,6 +318,25 @@ bool Card_less(const Card &a, const Card &b, Suit trump)
     
     else
     {
+        if (a.is_right_bower(trump))
+        {
+            return false;
+        }
+        if (b.is_right_bower(trump))
+        {
+            return true;
+        }
+        
+        if (a.is_left_bower(trump))
+        {
+            return false;
+        }
+        
+        if (b.is_left_bower(trump))
+        {
+            return true;
+        }
+        
         if (a.get_rank() < b.get_rank())
         {
             return true;
@@ -357,6 +376,25 @@ bool Card_less(const Card &a, const Card &b, const Card &led_card, Suit
     
     else
     {
+        if (a.is_right_bower(trump))
+        {
+            return false;
+        }
+        if (b.is_right_bower(trump))
+        {
+            return true;
+        }
+        
+        if (a.is_left_bower(trump))
+        {
+            return false;
+        }
+        
+        if (b.is_left_bower(trump))
+        {
+            return true;
+        }
+        
         if (a.get_rank() < b.get_rank())
         {
             return true;
