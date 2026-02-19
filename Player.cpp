@@ -307,7 +307,15 @@ class HumanPlayer : public Player
     //  is removed the player's hand.
     Card lead_card(Suit trump) override
     {
+        print_hand();
+        std::cout << "Human player " << name << ", please select a card:\n";
         
+        int x {};
+        std::cin >> x;
+        
+        Card saved = hand[x];
+        hand.erase(hand.begin() + x);
+        return saved;
     }
 
     //REQUIRES Player has at least one card
@@ -315,17 +323,28 @@ class HumanPlayer : public Player
     //  The card is removed from the player's hand.
     Card play_card(const Card &led_card, Suit trump) override
     {
+        print_hand();
+        std::cout << "Human player " << name << ", please select a card:\n";
         
+        int x {};
+        std::cin >> x;
+        
+        Card saved = hand[x];
+        hand.erase(hand.begin() + x);
+        return saved;
     }
 
  private:
     std::string name;
     std::vector<Card> hand;
     
-    void print_hand() const {
+    void print_hand() const
+    {
       for (size_t i=0; i < hand.size(); ++i)
-        std::cout << "Human player " << name << "'s hand: "
-             << "[" << i << "] " << hand[i] << "\n";
+      {
+          std::cout << "Human player " << name << "'s hand: "
+          << "[" << i << "] " << hand[i] << "\n";
+      }
     }
 };
 
@@ -334,7 +353,28 @@ class HumanPlayer : public Player
 //To create an object that won't go out of scope when the function returns,
 //use "return new Simple(name)" or "return new Human(name)"
 //Don't forget to call "delete" on each Player* after the game is over
-Player * Player_factory(const std::string &name, const std::string &strategy);
+Player * Player_factory(const std::string &name, const std::string &strategy)
+{
+    // We need to check the value of strategy and return
+      // the corresponding player type.
+    if (strategy == "Simple")
+    {
+    // The "new" keyword dynamically allocates an object.
+        return new SimplePlayer(name);
+    }
+      
+    else if (strategy == "Human")
+    {
+        return new HumanPlayer(name);
+    }
+    
+    return nullptr;
+    
+}
 
 //EFFECTS: Prints player's name to os
-std::ostream & operator<<(std::ostream &os, const Player &p);
+std::ostream & operator<<(std::ostream &os, const Player &p)
+{
+    os << p.get_name();
+    return os;
+}
