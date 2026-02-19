@@ -4,6 +4,9 @@
 class SimplePlayer : public Player
 {
 public:
+    // Constructor
+    SimplePlayer (const std::string &name) : name(name), hand() {}
+    
     //EFFECTS returns player's name
     const std::string & get_name() const override
     {
@@ -43,10 +46,11 @@ public:
                 order_up_suit = x;
                 return true;
             }
-            
-            return false;
+
+                return false;
             
         }
+        
         
         if (round == 2)
         {
@@ -74,14 +78,32 @@ public:
             }
             
             return false;
-            
+        
         }
+        
+        return false;
+        
     }
 
     //REQUIRES Player has at least one card
     //EFFECTS  Player adds one card to hand and removes one card from hand.
+    //Pro-tip: Here’s a nice way to remove a Card from a vector using vector::erase.
+    //vector<Card> hand;  // Assume hand is full of cards
+    // hand.erase(hand.begin() + i);  // Remove card i
     void add_and_discard(const Card &upcard) override
     {
+        hand.push_back(upcard);
+        int x {0};
+        
+        for (int i {1}; i < hand.size(); ++i)
+        {
+            if (Card_less(hand[i], hand[x], upcard.get_suit()))
+            {
+                x = i;
+            }
+        }
+
+        hand.erase(hand.begin() + x);
         
     }
 
@@ -91,7 +113,56 @@ public:
     //  is removed the player's hand.
     Card lead_card(Suit trump) override
     {
+        bool notTrump = false;
+        int x {0};
         
+        for (int i {}; i < hand.size(); ++i)
+        {
+            if (!(hand[i].is_trump(trump)))
+            {
+                notTrump = true;
+                x = i;
+                break;
+            }
+            
+        }
+
+        if (notTrump)
+        {
+            for (int i {}; i < hand.size(); ++i)
+            {
+                if (hand[i].is_trump(trump))
+                {
+                    continue;
+                }
+                
+               if (Card_less(hand[x], hand[i], trump))
+               {
+                   x = i;
+               }
+            }
+            
+            Card saved = hand[x];
+            hand.erase(hand.begin() + x);
+            return saved;
+            
+        }
+        
+        else
+        {
+            for (int i{}; i < hand.size(); ++i)
+            {
+                if (Card_less(hand[x], hand[i], trump))
+                {
+                    x = i;
+                }
+            }
+            
+            Card saved = hand[x];
+            hand.erase(hand.begin() + x);
+            return saved;
+            
+        }
     }
 
     //REQUIRES Player has at least one card
@@ -101,7 +172,17 @@ public:
     {
         
     }
+    
+    
+private:
+   std::string name;
+   std::vector<Card> hand;
 };
+
+
+
+
+
 
 class HumanPlayer : public Player
 {
