@@ -283,7 +283,7 @@ bool operator==(const Card &lhs, const Card &rhs)
     {
         return true;
     }
-    
+   
     return false;
     
 }

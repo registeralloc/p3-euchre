@@ -118,6 +118,27 @@ TEST(make_trump_two_p)
     delete p;
 }
 
+TEST(make_trump_bower)
+{
+    Player *p {Player_factory("Player", "Simple")};
+    
+    p -> add_card(Card(JACK, CLUBS));
+    p -> add_card(Card(ACE, SPADES));
+    p -> add_card(Card(NINE, HEARTS));
+    p -> add_card(Card(TEN, HEARTS));
+    p -> add_card(Card(TEN, DIAMONDS));
+    
+    // Upcard and trump
+    Card upcard(KING, SPADES);
+    Suit trump;
+    
+    ASSERT_TRUE(p -> make_trump(upcard, false, 1, trump));
+    ASSERT_EQUAL(trump, SPADES);
+    
+    // delete
+    delete p;
+}
+
 TEST(add_and_discard)
 {
     Player *p {Player_factory("Player", "Simple")};
@@ -203,6 +224,25 @@ TEST(play_card)
     Card led {NINE, CLUBS};
     Card a {p -> play_card(led, HEARTS)};
     ASSERT_EQUAL(a, Card(NINE, SPADES));
+                         
+    delete p;
+    
+}
+
+TEST(play_card_bower)
+{
+    Player *p {Player_factory("Player", "Simple")};
+    
+    p -> add_card(Card(ACE, SPADES));
+    p -> add_card(Card(JACK, CLUBS));
+    p -> add_card(Card(TEN, SPADES));
+    p -> add_card(Card(TEN, HEARTS));
+    p -> add_card(Card(TEN, DIAMONDS));
+    
+    // left bower follows trump
+    Card led {NINE, SPADES};
+    Card a {p -> play_card(led, SPADES)};
+    ASSERT_EQUAL(a, Card(JACK, CLUBS));
                          
     delete p;
     
